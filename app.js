@@ -34,13 +34,16 @@ function getRandomproducts() {
 function renderproducts() {
   let products1 = getRandomproducts();
   let products2 = getRandomproducts();
-  console.log(products1, products2);
+  let products3 = getRandomproducts();
+  console.log(products1, products2, products3);
   // seriously consider using an array here
   // remember how do you know if an array includes something?
   // Google it and find out
-  while (products1 === products2) {
+  while (products1 === products2) (products1 === products3)(products2 === products3); {
     products2 = getRandomproducts();
-    console.log(products1, products2);
+    products1 = getRandomproducts();
+    products3 = getRandomproducts();
+    console.log(products1, products2, products3);
   }
 
   image1.src = allproducts[products1].src;
@@ -49,6 +52,9 @@ function renderproducts() {
   image2.src = allproducts[products2].src;
   image2.alt = allproducts[products2].name;
   allproducts[products2].views++;
+  image3.src = allproducts[products3].src;
+  image3.alt = allproducts[products3].name;
+  allproducts[products3].views++;
   console.log(allproducts);
 }
 
