@@ -109,6 +109,7 @@ function renderResults() {
 
 
 
+
   let bag = new product('bag-product');
   let banana = new product('banana-product');
   let bathroom = new product('bathroom-product');
@@ -133,6 +134,59 @@ function renderResults() {
     bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
 
   // console.log(allproduct);
-  renderproduct();
+renderproduct();
+function renderChart() {
+  let productName = [];
+  let productViews = [];
+  let productClicks = [];
+  for (let i = 0; i < product.allproductArray.length; i++){
+    if (clickedproduct === product.allproductArray[i].name) {
+      product.allproductArray[i].clicks++;
+      break;
+    }
+  }
+  }
+
+  const data = {
+    labels: productName,
+    datasets: [{
+      label: 'Views',
+      data: productViews,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)'
+      ],
+      borderWidth: 1
+    },
+    {
+      label: 'Clicks',
+      data: productClicks,
+      backgroundColor: [
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 159, 64)'
+      ],
+      borderWidth: 1
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    },
+  };
+  let canvasChart = document.getElementById('myChart');
+  const myChart = new Chart(canvasChart, config);
+
+
 
   myContainer.addEventListener('click', handleproductClick);
