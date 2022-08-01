@@ -43,6 +43,7 @@ function renderproduct() {
   // seriously consider using an array here
   // remember how do you know if an array includes something?
   // Google it and find out
+
   while (product1 === product2) (product1 === product3)(product2 === product3); {
     product2 = getRandomproduct();
     product1 = getRandomproduct
@@ -50,12 +51,14 @@ function renderproduct() {
     console.log(product1, product2, product3);
   }
   
+
   image1.src = allproduct[product1].src;
   image1.alt = allproduct[product1].name;
   allproduct[product1].views++;
   image2.src = allproduct[product2].src;
   image2.alt = allproduct[product2].name;
   allproduct[product2].views++;
+
   image3.src = allproduct[product3].src;
   image3.alt = allproduct[product3].name;
   allproduct[product3].views++;
@@ -84,22 +87,26 @@ function renderproduct() {
     }
   }
 
+
   function handleButtonClick() {
     // if (clicks === clickAllowed) {
     renderResults();
+
     // }
   }
 
-  function renderResults() {
+function renderResults() {
 
-    // for each  product in my array, generate a LI
-    // ex: name had X views and was clicked on X times
-    for (let i = 0; i < allproduct.length; i++) {
-      let li = document.createElement('li');
-      li.textContent = `${allproduct[i].name} had ${allproduct[i].views} views and was clicked on ${allproduct[i].clicks} times`;
-      ul.appendChild(li);
-    }
+  // for each  product in my array, generate a LI
+  // ex: name had X views and was clicked on X times
+  for (let i = 0; i < allproduct.length; i++) {
+    let li = document.createElement('li');
+    li.textContent = `${allproduct[i].name} had ${allproduct[i].views} views and was clicked on ${allproduct[i].clicks} times`;
+    ul.appendChild(li);
   }
+
+}
+
 
 
   let bag = new product('bag-product');
