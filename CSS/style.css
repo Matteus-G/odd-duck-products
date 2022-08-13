@@ -50,7 +50,11 @@ section {
   align-items: flex-start;
 }
 
-
+section img {
+  width: 50%;
+  max-height: 50%;
+  border: 5px solid transparent;
+}
 
 section img:hover {
   border: 5px solid rgb(169, 108, 28);
