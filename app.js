@@ -1,13 +1,14 @@
 'use strict'
 
-console.log('hi');
+//console.log('hi');
 
 // GLOBAL VARIABLES
-function product(name, fileExtension = 'jpg') {
+function product(name, fileExtension = 'jpg', clicks = 0, views = 0) {
   this.name = name;
+  this.fileExtension = fileExtension;
   this.src = `imgs/${this.name}.${fileExtension}`;
-  this.clicks = 0;
-  this.views = 0;
+  this.clicks = clicks;
+  this.views = views;
 }
 
 let myContainer = document.querySelector('section');
@@ -19,18 +20,34 @@ let image2 = document.querySelector('#image-container img:nth-child(2)');
 let image3 = document.querySelector('#image-container img:nth-child(3)');
 
 function loadProduct() {
-  const product = JSON.parse(localStorage.getItem('product')) || [];
+  //const product = JSON.parse(localStorage.getItem('product')) || [];
+  let potentialProducts = localStorage.getItem('productOrders');
+  console.log(potentialProducts);
+  if (potentialProducts) {
+    let parsedOrders = JSON.parse(potentialProducts);
+    console.log(parsedOrders);
+    const productArr = parsedOrders.map((obj) => {
+      console.log(obj);
+     return new product(obj.name, obj.fileExtension, obj.clicks, obj.views);
+    });
+    console.log(productArr);
+    return productArr
 
-  const productArr = product.map((name) => new product(name))
-  return productArr
+  }
+  else {
+    let productArr = main();
+    console.log(productArr);
+    return productArr;
+  }
 }
-
 let allproduct = loadProduct();
 let clicks = 0;
 let lastThreeProducts = []
 
 let clickAllowed = 25;
 
+renderProducts(allproduct);
+myContainer.addEventListener('click', handleproductClick);
 function main() {
   // for each  product in my array, generate a LI
   // ex: name had X views and was clicked on X times
@@ -56,20 +73,16 @@ function main() {
   let waterCan = new product('water-can');
   let wineGlass = new product('wine-glass');
 
-  allproduct.push(bag, banana, bathroom, boots, breakfast,
-    bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+  return [bag, banana, bathroom, boots, breakfast,
+    bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass];
 
-  for (let i = 0; i < allproduct.length; i++) {
-    let li = document.createElement('li');
-    li.textContent = `${allproduct[i].name} had ${allproduct[i].views} views and was clicked on ${allproduct[i].clicks} times`;
-    UL.appendChild(li);
-  }
+
 
   // console.log(allproduct);
 
-  renderProducts(allproduct);
 
-  myContainer.addEventListener('click', handleproductClick);
+
+
 
 
 
@@ -77,12 +90,28 @@ function main() {
 
 
 
-function storeProducts() {
-  let stringifiedProducts = JSON.stringify(product);
-  console.log(stringifiedProducts);
-  localStorage.setItem('Products', stringifiedProducts)
+function storeProduct() {
+  console.log(allproduct);
+  let stringfiedProducts = JSON.stringify(allproduct);
+  console.log(stringfiedProducts);
+  localStorage.setItem('productOrders', stringfiedProducts);
 }
 
+function getProducts() {
+  // let potentialProducts = localStorage.getItem('productOrders');
+  if (localStorage.productOrders) {
+    // let parseOrders = JSON.parse(localStorage.allProducts);
+    allProducts = JSON.parse(localStorage.getItem('productChosen'));
+    for (let productChosen of allProducts) {
+      //console.log(productChosen);
+      let name = productChosen.name;
+      let src = productChosen.src;
+      let clicks = productChosen.clicks;
+      let views = productChosen.views;
+
+    }
+  }
+}
 
 
 
@@ -111,14 +140,17 @@ function renderProducts(products, lastProducts = []) {
   let threeImages = [image1, image2, image3]
 
   for (let i = 0; i < threeProducts.length; i++) {
+    // console.log(threeProducts[i]);
     renderProduct(threeProducts[i], threeImages[i])
+    //this is saving to my temporary 3 products array when it needs to persist in my all products arr
     threeProducts[i].views++;
   }
 
-  return threeProducts
+  //return threeProducts
 }
 
 function renderProduct(product, image) {
+  console.log(product);
   image.src = product.src;
   image.alt = product.name;
 }
@@ -131,95 +163,100 @@ function handleproductClick(event) {
   }
   clicks++;
   let clickedproduct = event.target.alt;
-  console.log(clickedproduct);
-  storeProducts();
+  //console.log(clickedproduct);
+
 
   for (let i = 0; i < allproduct.length; i++) {
     if (clickedproduct === allproduct[i].name) {
       allproduct[i].clicks++;
+      //console.log(allproduct[i]);
       break;
     }
   }
+
+
+
+  if (clicks === clickAllowed) {
+    myButton.className = 'clicks-allowed';
+    myContainer.removeEventListener('click', handleproductClick);
+    renderChart();
+    storeProduct();
+    for (let i = 0; i < allproduct.length; i++) {
+      let li = document.createElement('li');
+      li.textContent = `${allproduct[i].name} had ${allproduct[i].views} views and was clicked on ${allproduct[i].clicks} times`;
+      UL.appendChild(li);
+    }
+  }
+
+  lastThreeProducts = renderProducts(allproduct, lastThreeProducts)
 }
- 
 
-    if (clicks === clickAllowed) {
-      myButton.className = 'clicks-allowed';
-      myContainer.removeEventListener('click', handleproductClick);
+//renderProducts();
+//if (clicks === clickAllowed) {
 
-
-    }
-
-    lastThreeProducts = renderProducts(allproduct, lastThreeProducts)
-  
+//myContainer.removeEventListener('click', handleProductClick);
+//renderChart();
 
 
 
+// function renderResults() 
 
 
-  // function renderResults() 
+// renderproduct();
 
 
-  // renderproduct();
-
-
-  function renderChart() {
-    let product = [];
-    let productViews = [];
-    let productClicks = [];
-    for (let i = 0; i < product.allproductArray.length; i++) {
-      product.push(product[i].name);
-      productViews.push(product[i].views);
-      productClicks.push(product[i].clicks)
-
-
-
-
-      const data = {
-        labels: product,
-        datasets: [{
-          label: 'Views',
-          data: productViews,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)'
-          ],
-          borderColor: [
-            'rgb(255, 99, 132)'
-          ],
-          borderWidth: 1
-        },
-        {
-          label: 'Clicks',
-          data: productClicks,
-          backgroundColor: [
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgb(255, 159, 64)'
-          ],
-          borderWidth: 1
-        }]
-      };
-
-
-      const config = {
-        type: 'bar',
-        data: data,
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-
-          }
-        },
-      };
-    }
-    let canvasChart = document.getElementById('myChart');
-    const myChart = new Chart(canvasChart, config);
+function renderChart() {
+  let product = [];
+  let productViews = [];
+  let productClicks = [];
+  for (let i = 0; i < allproduct.length; i++) {
+    product.push(allproduct[i].name);
+    productViews.push(allproduct[i].views);
+    productClicks.push(allproduct[i].clicks)
   }
 
 
 
+  const data = {
+    labels: product,
+    datasets: [{
+      label: 'Views',
+      data: productViews,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)'
+      ],
+      borderWidth: 1
+    },
+    {
+      label: 'Clicks',
+      data: productClicks,
+      backgroundColor: [
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 159, 64)'
+      ],
+      borderWidth: 1
+    }]
+  };
 
-  main();
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+
+      }
+    },
+  };
+
+  let canvasChart = document.getElementById('myChart');
+  const myChart = new Chart(canvasChart, config);
+}
