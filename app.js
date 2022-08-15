@@ -226,7 +226,7 @@ function renderChart() {
         'rgba(255, 99, 132, 0.2)'
       ],
       borderColor: [
-        'rgb(255, 99, 132)'
+        'rgb(234, 37, 209)'
       ],
       borderWidth: 1
     },
@@ -234,10 +234,10 @@ function renderChart() {
       label: 'Clicks',
       data: productClicks,
       backgroundColor: [
-        'rgba(255, 159, 64, 0.2)'
+        'rgba(209, 237, 242, 0.2)'
       ],
       borderColor: [
-        'rgb(255, 159, 64)'
+        'rgb(190, 90, 80)'
       ],
       borderWidth: 1
     }]
